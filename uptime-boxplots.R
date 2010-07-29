@@ -17,7 +17,7 @@ plot_exit_uptime <- function() {
   "from descriptor d ",
   "join statusentry s on d.descriptor=s.descriptor ",
   "where uptime is not null ",
-  "    and date(s.validafter) = '2010-03-01' ")
+  "and s.validafter = '2010-02-19 08:00:00' ")
 
   rs <- dbSendQuery(con, q)
   exituptime <- fetch(rs,n=-1)
@@ -43,7 +43,7 @@ plot_version_uptime <- function() {
     "from descriptor d ",
     "join statusentry s on d.descriptor=s.descriptor ",
     "where uptime is not null ",
-    "    and date(s.validafter)='2010-03-01' ")
+    "and s.validafter='2010-02-19 08:00:00' ")
 
   rs <- dbSendQuery(con, q)
   versionuptime <- fetch(rs,n=-1)
@@ -73,7 +73,7 @@ plot_platform_uptime <- function()  {
     "from descriptor d ",
     "join statusentry s on d.descriptor=s.descriptor ",
     "where uptime is not null ",
-    "    and date(s.validafter) = '2010-03-01' ")
+    "and s.validafter = '2010-02-19 08:00:00' ")
 
   rs <- dbSendQuery(con, q)
   platformsuptime <- fetch(rs,n=-1)
