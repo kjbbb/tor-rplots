@@ -66,5 +66,35 @@ plot_bandwidth_platforms <- function()  {
 
 }
 
+plot_bandwidth_guardexit <- function() {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
+
+  q <- paste("select sum(d.bandwidthavg) as bandwidthsum, ",
+    "    (case when isexit=true then 't' else 'f' end) || ",
+    "    (case when isguard=true then 't' else 'f' end) as guardexit ",
+    "from descriptor d ",
+    "join statusentry s on d.descriptor=s.descriptor ",
+    "where d.bandwidthavg is not null ",
+    "    and date(s.validafter) >= '2010-02-01' ",
+    "    and date(s.validafter) <= '2010-03-01' ",
+    "group by (case when isexit=true then 't' else 'f' end) || ",
+    "    (case when isguard=true then 't' else 'f' end) ")
+
+  rs <- dbSendQuery(con, q)
+  bandwidth <- fetch(rs,n=-1)
+
+  ggplot(bandwidth, aes(x="", y=bandwidthsum, fill=guardexit)) +
+    geom_bar() +
+    coord_polar("y")
+
+  ggsave(filename="png/bandwidth-guardexit-piechart.png", width=8, height=5, dpi=72)
+
+  #Close database connection
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+}
+
 #plot_bandwidth_versions()
-plot_bandwidth_platforms()
+#plot_bandwidth_platforms()
+plot_bandwidth_guardexit()
