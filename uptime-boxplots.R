@@ -11,7 +11,7 @@ plot_exit_uptime <- function() {
 
   q <- paste("select ((d.uptime + ",
   "    (extract('epoch' from s.validafter) - ",
-  "    extract('epoch' from d.published)))/3600)::INTEGER as uptime, ",
+  "    extract('epoch' from d.published)))/86400)::INTEGER as uptime, ",
   "    ((case when isexit=true then 't' else 'f' end) || ",
   "    (case when isguard=true then 't' else 'f' end)) as guardexit ",
   "from descriptor d ",
@@ -21,10 +21,10 @@ plot_exit_uptime <- function() {
   "    and date(s.validafter) <= '2010-03-01' ")
 
   rs <- dbSendQuery(con, q)
-  uptime <- fetch(rs,n=-1)
+  exituptime <- fetch(rs,n=-1)
 
-  ggplot(uptime, aes(y=uptime, x=guardexit, fill=guardexit)) +
-    geom_boxplot()
+  ggplot(exituptime, aes(y=uptime, x=guardexit, fill=guardexit)) +
+    geom_boxplot(outlier.size=1)
 
   ggsave(filename="png/exit-uptime-boxplot.png", width=8, height=5, dpi=72)
 
@@ -39,7 +39,7 @@ plot_version_uptime <- function() {
 
   q <- paste("select ((d.uptime + ",
     "    (extract('epoch' from s.validafter) - ",
-    "    extract('epoch' from d.published))) / 3600)::INTEGER as uptime, ",
+    "    extract('epoch' from d.published))) / 86400)::INTEGER as uptime, ",
     "    substring(platform, 5, 5) as version ",
     "from descriptor d ",
     "join statusentry s on d.descriptor=s.descriptor ",
@@ -48,10 +48,10 @@ plot_version_uptime <- function() {
     "    and date(s.validafter) <= '2010-03-01' ")
 
   rs <- dbSendQuery(con, q)
-  uptime <- fetch(rs,n=-1)
+  versionuptime <- fetch(rs,n=-1)
 
-  ggplot(uptime, aes(y=uptime, x=version, fill=version)) +
-    geom_boxplot()
+  ggplot(versionuptime, aes(y=uptime, x=version, fill=version)) +
+    geom_boxplot(outlier.size=1)
 
   ggsave(filename="png/version-uptime-boxplot.png", width=8, height=5, dpi=72)
 
@@ -66,7 +66,7 @@ plot_platform_uptime <- function()  {
 
   q <- paste("select ((d.uptime + ",
     "    (extract('epoch' from s.validafter) - ",
-    "    extract('epoch' from d.published))) / 3600)::INTEGER as uptime, ",
+    "    extract('epoch' from d.published)))/86400)::INTEGER as uptime, ",
     "    (case when platform like '%Windows%' then 'Windows' ",
     "        when platform like '%Linux%' then 'Linux' ",
     "        when platform like '%FreeBSD%' then 'FreeBSD' ",
@@ -79,10 +79,10 @@ plot_platform_uptime <- function()  {
     "    and date(s.validafter) <= '2010-03-01'")
 
   rs <- dbSendQuery(con, q)
-  uptime <- fetch(rs,n=-1)
+  platformsuptime <- fetch(rs,n=-1)
 
-  ggplot(uptime, aes(y=uptime, x=platform, fill=platform))  +
-    geom_boxplot()
+  ggplot(platformsuptime, aes(y=uptime, x=platform, fill=platform))  +
+    geom_boxplot(outlier.size=1)
 
   ggsave(filename="png/platform-uptime-boxplot.png", width=8, height=5, dpi=72)
 
