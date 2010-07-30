@@ -21,7 +21,7 @@ plot_bandwidth_versions <- function() {
   bandwidth <- fetch(rs,n=-1)
 
   ggplot(bandwidth, aes(x="", y=bandwidthsum, fill=version)) +
-    geom_bar() +
+    geom_bar(position="dodge") +
     scale_y_continuous(name="") +
     scale_x_discrete(name="Version") +
     scale_colour_brewer(name="Version") +
