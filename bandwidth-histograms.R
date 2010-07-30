@@ -10,7 +10,7 @@ plot_bandwidth_versions <- function() {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
 
-  q <- paste("select d.bandwidthavg, ",
+  q <- paste("select d.bandwidthavg/131072 as bandwidthavg, ",
     "    substring(d.platform, 5, 5) as version ",
     "from descriptor d ",
     "join statusentry s on d.descriptor=s.descriptor ",
@@ -23,8 +23,10 @@ plot_bandwidth_versions <- function() {
 
   ggplot(bandwidth, aes(x=bandwidthavg, fill=version)) +
     geom_histogram() +
+    scale_y_continuous(name="Bandwidth (Mbit/s)") +
     scale_x_log10() +
-    coord_trans(x="log10")
+    coord_trans(x="log10") +
+    opts(title="Versions to bandwidth histogram (Logarithmic scale)")
 
   ggsave(filename="png/bandwidth-versions-histogram.png", width=8, height=5, dpi=72)
 
@@ -38,7 +40,7 @@ plot_bandwidth_platforms <- function()  {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
 
-  q <- paste("select d.bandwidthavg/131072, ",
+  q <- paste("select d.bandwidthavg/131072 as bandwidthavg, ",
     "    (case when platform like '%Windows%' then 'Windows' ",
     "     when platform like '%Linux%' then 'Linux' ",
     "     when platform like '%FreeBSD%' then 'FreeBSD' ",
@@ -54,8 +56,10 @@ plot_bandwidth_platforms <- function()  {
 
   ggplot(bandwidth, aes(x=bandwidthavg, fill=platform)) +
     geom_histogram() +
+    scale_y_continuous(name="Bandwidth (Mbit/s)") +
     scale_x_log10() +
-    coord_trans(x="log10")
+    coord_trans(x="log10") +
+    opts(title="Platforms to bandwidth histogram (Logarithmic scale)")
 
   ggsave(filename="png/bandwidth-platforms-histogram.png", width=8, height=5, dpi=72)
 
