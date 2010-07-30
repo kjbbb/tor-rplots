@@ -1,6 +1,8 @@
 #!/bin/sh
 
-if [ -e "png" ]; then
+$pngdir=png
+
+if [ -d $pngdir ]; then
   mkdir png
 fi
 

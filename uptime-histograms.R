@@ -96,5 +96,6 @@ plot_platform_uptime <- function()  {
   dbUnloadDriver(drv)
 }
 
-#plot_version_uptime()
+plot_version_uptime()
 plot_platform_uptime()
+plot_exit_uptime()
