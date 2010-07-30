@@ -26,7 +26,7 @@ plot_bandwidth_versions <- function() {
     scale_x_log10() +
     coord_trans(x="log10")
 
-  ggsave(filename="./bandwidth-versions-histogram.png", width=8, height=5, dpi=72)
+  ggsave(filename="png/bandwidth-versions-histogram.png", width=8, height=5, dpi=72)
 
   #Close database connection
   dbDisconnect(con)
@@ -57,12 +57,12 @@ plot_bandwidth_platforms <- function()  {
     scale_x_log10() +
     coord_trans(x="log10")
 
-  ggsave(filename="./bandwidth-platforms-histogram.png", width=8, height=5, dpi=72)
+  ggsave(filename="png/bandwidth-platforms-histogram.png", width=8, height=5, dpi=72)
 
   #Close database connection
   dbDisconnect(con)
   dbUnloadDriver(drv)
 }
 
-#plot_bandwidth_versions()
+plot_bandwidth_versions()
 plot_bandwidth_platforms()

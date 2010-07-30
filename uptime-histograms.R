@@ -28,7 +28,7 @@ plot_exit_uptime <- function() {
     geom_histogram(binwidth=24) +
     scale_x_continuous(limits=c(0, 1000))
 
-  ggsave(filename="./exit-uptime-histogram.png", width=8, height=5, dpi=72)
+  ggsave(filename="png/exit-uptime-histogram.png", width=8, height=5, dpi=72)
 
   #Close database connection
   dbDisconnect(con)
@@ -56,7 +56,7 @@ plot_version_uptime <- function() {
     geom_histogram(binwidth=24) +
     scale_x_continuous(limits=c(0,1000))
 
-  ggsave(filename="./version-uptime-histogram.png", width=8, height=5, dpi=72)
+  ggsave(filename="png/version-uptime-histogram.png", width=8, height=5, dpi=72)
 
   #Close database connection
   dbDisconnect(con)
@@ -89,7 +89,7 @@ plot_platform_uptime <- function()  {
 #    geom_histogram(binwidth=1) +
 #    scale_x_continuous(limits=c(0,1000))
 
-  ggsave(filename="./platform-uptime-boxplot.png", width=8, height=5, dpi=72)
+  ggsave(filename="png/platform-uptime-boxplot.png", width=8, height=5, dpi=72)
 
   #Close database connection
   dbDisconnect(con)
