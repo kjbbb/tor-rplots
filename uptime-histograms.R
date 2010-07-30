@@ -11,7 +11,7 @@ plot_exit_uptime <- function() {
 
   q <- paste("select ((d.uptime + ",
   "    (extract('epoch' from s.validafter) - ",
-  "    extract('epoch' from d.published)))/3600)::INTEGER as uptime, ",
+  "    extract('epoch' from d.published)))/86400)::INTEGER as uptime, ",
   "    ((case when isexit=true then 't' else 'f' end) || ",
   "    (case when isguard=true then 't' else 'f' end)) as guardexit ",
   "from descriptor d ",
@@ -25,8 +25,9 @@ plot_exit_uptime <- function() {
   uptime <- fetch(rs,n=-1)
 
   ggplot(uptime, aes(x=uptime, fill=guardexit)) +
-    geom_histogram(binwidth=24) +
-    scale_x_continuous(limits=c(0, 1000))
+    geom_histogram(binwidth=20, position="dodge") +
+    scale_x_continuous(name="Uptime (days)") +
+    opts(title="Guard and exit flag uptime histogram")
 
   ggsave(filename="png/exit-uptime-histogram.png", width=8, height=5, dpi=72)
 
@@ -41,7 +42,7 @@ plot_version_uptime <- function() {
 
   q <- paste("select ((d.uptime + ",
     "    (extract('epoch' from s.validafter) - ",
-    "    extract('epoch' from d.published))) / 3600)::INTEGER as uptime, ",
+    "    extract('epoch' from d.published))) / 86400)::INTEGER as uptime, ",
     "    substring(platform, 5, 5) as version ",
     "from descriptor d ",
     "join statusentry s on d.descriptor=s.descriptor ",
@@ -53,8 +54,9 @@ plot_version_uptime <- function() {
   uptime <- fetch(rs,n=-1)
 
   ggplot(uptime, aes(x=uptime, fill=version)) +
-    geom_histogram(binwidth=24) +
-    scale_x_continuous(limits=c(0,1000))
+    geom_histogram(binwidth=20, position="dodge") +
+    scale_x_continuous(name="Uptime (days)") +
+    opts(title="Version uptime histogram")
 
   ggsave(filename="png/version-uptime-histogram.png", width=8, height=5, dpi=72)
 
@@ -69,7 +71,7 @@ plot_platform_uptime <- function()  {
 
   q <- paste("select ((d.uptime + ",
     "    (extract('epoch' from s.validafter) - ",
-    "    extract('epoch' from d.published))) / 3600)::INTEGER as uptime, ",
+    "    extract('epoch' from d.published)))/86400)::INTEGER as uptime, ",
     "    (case when platform like '%Windows%' then 'Windows' ",
     "        when platform like '%Linux%' then 'Linux' ",
     "        when platform like '%FreeBSD%' then 'FreeBSD' ",
@@ -84,12 +86,12 @@ plot_platform_uptime <- function()  {
   rs <- dbSendQuery(con, q)
   uptime <- fetch(rs,n=-1)
 
-  ggplot(uptime, aes(y=uptime, x=platform, fill=platform))  +
-    geom_boxplot()
-#    geom_histogram(binwidth=1) +
-#    scale_x_continuous(limits=c(0,1000))
+  ggplot(uptime, aes(x=uptime, fill=platform))  +
+    geom_histogram(binwidth=20, position="dodge") +
+    scale_x_continuous(name="Uptime (days)") +
+    opts(title="Platform uptime histogram")
 
-  ggsave(filename="png/platform-uptime-boxplot.png", width=8, height=5, dpi=72)
+  ggsave(filename="png/platform-uptime-histogram.png", width=8, height=5, dpi=72)
 
   #Close database connection
   dbDisconnect(con)
