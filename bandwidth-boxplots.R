@@ -22,7 +22,7 @@ plot_bandwidth_versions <- function() {
 
   ggplot(bandwidth, aes(y=bandwidthavg, x=version, fill=version)) +
     geom_boxplot(outlier.size=1) +
-    scale_y_continuous(name="Bandwidth (Mbit/s)", limits=c(0,100)) +
+    scale_y_continuous(name="Bandwidth (Mbit/s)") +
     scale_x_discrete(name="Version") +
     opts(title="Bandwidth per version")
 
@@ -53,7 +53,7 @@ plot_bandwidth_platforms <- function()  {
 
   ggplot(bandwidth, aes(y=bandwidthavg, x=platform, fill=platform)) +
     geom_boxplot(outlier.size=1) +
-    scale_y_continuous(name="Bandwidth (Mbit/s)", limits=c(0,100)) +
+    scale_y_continuous(name="Bandwidth (Mbit/s)") +
     scale_x_discrete(name="Platform") +
     opts(title="Bandwidth per platform")
 
