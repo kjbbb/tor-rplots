@@ -22,7 +22,7 @@ plot_bandwidth_versions <- function() {
   bandwidth <- fetch(rs,n=-1)
 
   ggplot(bandwidth, aes(x=bandwidthavg, fill=version)) +
-    geom_histogram() +
+    geom_histogram(position="dodge") +
     scale_y_continuous(name="Bandwidth (Mbit/s)") +
     scale_x_log10() +
     coord_trans(x="log10") +
