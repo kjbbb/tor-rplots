@@ -22,9 +22,12 @@ plot_bandwidth_versions <- function() {
 
   ggplot(bandwidth, aes(x="", y=bandwidthsum, fill=version)) +
     geom_bar() +
-    coord_polar("y")
+    scale_y_continuous(name="") +
+    scale_x_discrete(name="Version") +
+    scale_colour_brewer(name="Version") +
+    opts(title="Bandwidth distribution per version")
 
-  ggsave(filename="png/bandwidth-versions-piechart.png", width=8, height=5, dpi=72)
+  ggsave(filename="png/bandwidth-versions-bargraph.png", width=8, height=5, dpi=72)
 
   #Close database connection
   dbDisconnect(con)
@@ -50,13 +53,16 @@ plot_bandwidth_platforms <- function()  {
     "      when platform like '%FreeBSD%' then 'FreeBSD' ",
     "      when platform like '%Darwin%' then 'Darwin' else 'other' end)")
 
-
   rs <- dbSendQuery(con, q)
   bandwidth <- fetch(rs,n=-1)
 
   ggplot(bandwidth, aes(x="", y=bandwidthsum, fill=platform)) +
     geom_bar() +
-    coord_polar("y")
+    scale_y_continuous(name="") +
+    scale_x_discrete(name="") +
+    scale_colour_brewer(name="Platform") +
+    coord_polar("y") +
+    opts(title="Bandwidth distribution per platform")
 
   ggsave(filename="png/bandwidth-platforms-piechart.png", width=8, height=5, dpi=72)
 
@@ -86,7 +92,11 @@ plot_bandwidth_guardexit <- function() {
 
   ggplot(bandwidth, aes(x="", y=bandwidthsum, fill=guardexit)) +
     geom_bar() +
-    coord_polar("y")
+    scale_y_continuous(name="") +
+    scale_x_discrete(name="") +
+    scale_colour_brewer(name="Guard/exit flags") +
+    coord_polar("y") +
+    opts(title="Bandwidth distribution per guard/exit/relay flags")
 
   ggsave(filename="png/bandwidth-guardexit-piechart.png", width=8, height=5, dpi=72)
 
@@ -95,6 +105,6 @@ plot_bandwidth_guardexit <- function() {
   dbUnloadDriver(drv)
 }
 
-#plot_bandwidth_versions()
-#plot_bandwidth_platforms()
+plot_bandwidth_versions()
+plot_bandwidth_platforms()
 plot_bandwidth_guardexit()

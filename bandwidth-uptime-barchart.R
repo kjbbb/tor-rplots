@@ -12,7 +12,7 @@ plot_bandwidth_uptime <- function() {
 
 
   q <- paste("select (round(d.uptime/864000.0)*10)::integer as uptime, ",
-    "    avg(d.bandwidthavg)::integer as bwavg ",
+    "    (avg(d.bandwidthavg)/131072.0)::integer as bwavg ",
     "from descriptor d ",
     "join statusentry s on d.descriptor=s.descriptor ",
     "where d.bandwidthavg is not null ",
@@ -24,7 +24,10 @@ plot_bandwidth_uptime <- function() {
   bandwidth <- fetch(rs,n=-1)
 
   ggplot(bandwidth) +
-    geom_bar(aes(x=uptime,y=bwavg), stat="identity")
+    geom_bar(aes(x=uptime,y=bwavg), stat="identity") +
+    scale_x_continuous(name="Uptime (days)") +
+    scale_y_continuous(name="Bandwidth (Mbit/s)") +
+    opts(title="Bandwidth to uptime distribution (10 day intervals)")
 
   ggsave(filename="png/bandwidth-uptime-bargraph.png", width=8, height=5, dpi=72)
 

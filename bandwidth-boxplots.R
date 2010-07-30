@@ -21,8 +21,10 @@ plot_bandwidth_versions <- function() {
   bandwidth <- fetch(rs,n=-1)
 
   ggplot(bandwidth, aes(y=bandwidthavg, x=version, fill=version)) +
-    geom_boxplot() +
-    scale_y_continuous(limits=c(0, 10))
+    geom_boxplot(outlier.size=1) +
+    scale_y_continuous(name="Bandwidth (Mbit/s)", limits=c(0,100)) +
+    scale_x_discrete(name="Version") +
+    opts(title="Bandwidth per version")
 
   ggsave(filename="png/bandwidth-versions-boxplot.png", width=8, height=5, dpi=72)
 
@@ -44,14 +46,16 @@ plot_bandwidth_platforms <- function()  {
     "from descriptor d ",
     "join statusentry s on d.descriptor=s.descriptor ",
     "where bandwidthavg is not null ",
-    "and date(s.validafter) = '2010-02-01'")
+    "and s.validafter = '2010-02-19 08:00:00'")
 
   rs <- dbSendQuery(con, q)
   bandwidth <- fetch(rs,n=-1)
 
   ggplot(bandwidth, aes(y=bandwidthavg, x=platform, fill=platform)) +
-    geom_boxplot() +
-    scale_y_continuous(limits=c(0, 10))
+    geom_boxplot(outlier.size=1) +
+    scale_y_continuous(name="Bandwidth (Mbit/s)", limits=c(0,100)) +
+    scale_x_discrete(name="Platform") +
+    opts(title="Bandwidth per platform")
 
   ggsave(filename="png/bandwidth-platforms-boxplot.png", width=8, height=5, dpi=72)
 
@@ -60,5 +64,5 @@ plot_bandwidth_platforms <- function()  {
   dbUnloadDriver(drv)
 }
 
-#plot_bandwidth_versions()
+plot_bandwidth_versions()
 plot_bandwidth_platforms()

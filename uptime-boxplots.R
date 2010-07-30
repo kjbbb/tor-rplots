@@ -23,9 +23,15 @@ plot_exit_uptime <- function() {
   exituptime <- fetch(rs,n=-1)
 
   ggplot(exituptime, aes(y=uptime, x=guardexit, fill=guardexit)) +
-    geom_boxplot(outlier.size=1)
+    geom_boxplot(outlier.size=1) +
+    scale_y_continuous(name="Uptime (days)") +
+    scale_x_discrete(name="Guard/Exit flags") +
+    scale_colour_brewer(name="Guard/exit flags",
+        breaks=c("ff", "tf", "tt", "ft"),
+        labels=c("f,f", "t,f", "t,t", "f,t"))
+    opts(title="Guard, exit, and relay uptime")
 
-  ggsave(filename="png/exit-uptime-boxplot.png", width=8, height=5, dpi=72)
+  ggsave(filename="png/guard-exit-relay-uptime-boxplot.png", width=8, height=5, dpi=72)
 
   #Close database connection
   dbDisconnect(con)
@@ -49,7 +55,10 @@ plot_version_uptime <- function() {
   versionuptime <- fetch(rs,n=-1)
 
   ggplot(versionuptime, aes(y=uptime, x=version, fill=version)) +
-    geom_boxplot(outlier.size=1)
+    geom_boxplot(outlier.size=1) +
+    scale_y_continuous(name="Uptime (days)") +
+    scale_x_discrete(name="Version") +
+    opts(title="Version uptime")
 
   ggsave(filename="png/version-uptime-boxplot.png", width=8, height=5, dpi=72)
 
@@ -79,7 +88,10 @@ plot_platform_uptime <- function()  {
   platformsuptime <- fetch(rs,n=-1)
 
   ggplot(platformsuptime, aes(y=uptime, x=platform, fill=platform))  +
-    geom_boxplot(outlier.size=1)
+    geom_boxplot(outlier.size=1) +
+    scale_y_continuous(name="Uptime (days)") +
+    scale_x_discrete(name="Platform") +
+    opts(title="Platform uptime")
 
   ggsave(filename="png/platform-uptime-boxplot.png", width=8, height=5, dpi=72)
 
